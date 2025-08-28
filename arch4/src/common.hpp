@@ -14,6 +14,7 @@
 #include <chrono>
 #include <random>
 #include <filesystem>
+#include <cmath>
 
 namespace arch4 {
 

@@ -35,6 +35,8 @@ public:
 private:
     RouterConfig cfg_;
     ModuleManager &mm_;
+    std::unordered_map<std::string, std::unordered_set<std::string>> seed_cache_;
+    const std::unordered_set<std::string>& seeds_for(const PatchRecord &rec);
 };
 
 }

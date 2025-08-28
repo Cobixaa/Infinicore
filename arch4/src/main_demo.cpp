@@ -23,7 +23,7 @@ int main() {
         }
     }
 
-    RouterConfig cfg; cfg.final_top_m = 2; cfg.ann_top_k = 50;
+    RouterConfig cfg; cfg.final_top_m = 3; cfg.ann_top_k = 50;
     Router router(cfg, mm);
     Aggregator agg;
 

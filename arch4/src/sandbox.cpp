@@ -45,6 +45,11 @@ std::optional<std::string> sandbox_exec(const std::vector<std::string> &cmd,
         // Apply limits
         apply_rlimits(limits);
 
+        // Wall-clock safety: alarm as a backstop (seconds)
+        unsigned int secs = (unsigned int)((limits.time_limit_ms + 999) / 1000);
+        if (secs == 0) secs = 1;
+        alarm(secs);
+
         // Best-effort: drop network by unsetting env and using no net syscalls (Termux limited)
         unsetenv("http_proxy"); unsetenv("https_proxy"); unsetenv("no_proxy");
 
