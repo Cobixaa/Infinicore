@@ -1,6 +1,4 @@
-#include "module_manager.hpp"
-#include "sandbox.hpp"
-#include "test_runner.hpp"
+#include "arch4.hpp"
 
 namespace fs = std::filesystem;
 

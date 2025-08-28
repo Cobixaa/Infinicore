@@ -1,6 +1,6 @@
 ## ARCH4 - Trustworthy Low-FLOP Patch System (v4)
 
-ARCH4 is a small, portable framework to manage, route, and safely execute modular "patches" (skills) with:
+ARCH4 is a small, portable framework to manage, route, and safely execute modular "patches" (skills) with a Python-first API (like PyTorch/TensorFlow) backed by a fast C++ core:
 - pre-install validation and tests
 - hierarchical routing (metadata → graph → ANN → selector)
 - deterministic aggregation with provenance
@@ -9,10 +9,34 @@ ARCH4 is a small, portable framework to manage, route, and safely execute modula
 
 Targets laptops, desktops, and Android Termux (aarch64). No Make/CMake required: build with a single g++ command.
 
-### Quick Start (Linux/Termux)
+### Quick Start (Python-first)
+```bash
+# 1) Build shared library (.so) with clang++ (preferred)
+clang++ -std=gnu++17 -O3 -ffast-math -flto -fPIC -march=native -mtune=native -pthread \
+  arch4/src/module_manager.cpp arch4/src/router.cpp arch4/src/aggregator.cpp \
+  arch4/src/sandbox.cpp arch4/src/test_runner.cpp arch4/src/c_api.cpp \
+  -o libarch4.so
+
+# 2) Use the Python API
+python3 - << 'PY'
+import sys
+sys.path.insert(0, 'arch4/python')
+from arch4 import Manager, Router
+m = Manager('arch4/state')
+for d in ['arch4/examples/patches/wiki','arch4/examples/patches/math','arch4/examples/patches/date']:
+    try: m.install(d)
+    except Exception: pass
+r = Router(m)
+print(r.answer('what is earth?'))
+print(r.answer('2+2'))
+print(r.answer("what's the date?"))
+PY
+```
+
+### Native Demo (optional CLI/chat)
 ```bash
 # Build (clang++ preferred)
-clang++ -std=gnu++17 -O3 -Ofast -flto -march=native -mtune=native -pthread \
+clang++ -std=gnu++17 -O3 -ffast-math -flto -march=native -mtune=native -pthread \
   arch4/src/main_demo.cpp \
   arch4/src/module_manager.cpp \
   arch4/src/router.cpp \
@@ -58,9 +82,11 @@ python3 arch4/sdk/packager.py validate arch4/examples/patches/my_patch
 ```
 4) Run the demo. The ModuleManager will auto-install your patch if it has a `manifest.json` and passes tests.
 
-### C++ API Overview
+### C++ API Overview (single header)
 - `ModuleManager` (install/verify/test/enable/disable, execute)
 ```cpp
+// include once
+#include "arch4/src/arch4.hpp"
 arch4::ModuleManager mm("arch4/state");
 std::string err;
 bool ok = mm.install("arch4/examples/patches/math", err);
@@ -84,7 +110,7 @@ python3 arch4/sdk/packager.py sign arch4/examples/patches/new_patch
 python3 arch4/sdk/packager.py validate arch4/examples/patches/new_patch
 ```
 
-### Production Hardening (roadmap hooks in code)
+### Production Hardening (roadmap hooks)
 - Signatures: set `ARCH4_REQUIRE_SIG=1` to enforce `signature.txt` (dev placeholder).
 - Rollout/rollback: add metrics loop to auto-disable on regressions.
 - Telemetry: write events under `arch4/state/telemetry/` (see `sdk/telemetry.py`).
@@ -92,6 +118,7 @@ python3 arch4/sdk/packager.py validate arch4/examples/patches/new_patch
 ### Performance Notes
 - Router caches concept seeds parsed from tests to reduce per-query overhead.
 - Sandbox uses RLIMIT_AS and RLIMIT_CPU with an alarm backstop for wall time.
-- Build with `-O3 -Ofast -flto -march=native` for maximum performance on your device.
+- Build with `-O3 -ffast-math -flto -march=native` for maximum performance on your device.
 
-# Infinicore
+### Status
+MVP: Single-header C++ core (`arch4.hpp`), shared library C ABI, Python API wrapper, SDK packager, example patches, router/aggregator and demos.

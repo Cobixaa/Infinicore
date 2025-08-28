@@ -1,7 +1,4 @@
-#include "common.hpp"
-#include "module_manager.hpp"
-#include "router.hpp"
-#include "aggregator.hpp"
+#include "arch4.hpp"
 
 using namespace arch4;
 
