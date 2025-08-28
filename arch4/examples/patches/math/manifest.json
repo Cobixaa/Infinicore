@@ -1,0 +1,11 @@
+{
+  "id": "math",
+  "name": "Math Tools",
+  "version": "0.1.0",
+  "author": "arch4",
+  "tags": ["math", "calculator", "numbers"],
+  "entry_point": "run.py",
+  "tests": "tests.jsonl",
+  "trust_score": 0.7
+}
+

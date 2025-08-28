@@ -1,0 +1,11 @@
+{
+  "id": "wiki",
+  "name": "Stub Wiki Facts",
+  "version": "0.1.0",
+  "author": "arch4",
+  "tags": ["facts", "wikipedia", "knowledge"],
+  "entry_point": "run.py",
+  "tests": "tests.jsonl",
+  "trust_score": 0.5
+}
+
