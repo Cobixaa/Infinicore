@@ -1,0 +1,11 @@
+{
+  "id": "date",
+  "name": "Date & Time",
+  "version": "0.1.0",
+  "author": "arch4",
+  "tags": ["date", "time", "now"],
+  "entry_point": "run.py",
+  "tests": "tests.jsonl",
+  "trust_score": 0.6
+}
+
